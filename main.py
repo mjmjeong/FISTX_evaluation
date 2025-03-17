@@ -23,9 +23,12 @@ def evaluate_pose(args):
     width_side = int(cap_side.get(cv2.CAP_PROP_FRAME_WIDTH) + 0.5)
     height_side = int(cap_side.get(cv2.CAP_PROP_FRAME_HEIGHT) + 0.5)
     
+    size = (640, 1800) # TODO: change! 
+    screen_height, screen_width = size[0], size[1]
+    screen = np.zeros((screen_height, screen_width, 3), dtype=np.uint8) 
+
     # videos (outputs)
     if args.save_path: 
-        size = (640, 480) # TODO: change! 
         fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
         video_frames = cv2.VideoWriter(args.save_path, fourcc, 24, size)
 
@@ -44,13 +47,13 @@ def evaluate_pose(args):
             front_image = cv2.cvtColor(frame_, cv2.COLOR_BGR2RGB)
             front_image.flags.writeable = False
             results = pose.process(front_image)
-            evaluator.front_update(front_image, results)
+            curr_observation = evaluator.front_update(results)
 
             # drawing
             front_image.flags.writeable = True
             front_image = cv2.cvtColor(front_image, cv2.COLOR_RGB2BGR)
-            evaluator.front_drawing(front_image, results)
-            front _image.flags.writeable = False
+            evaluator.front_drawing(front_image, results, curr_observation)
+            front_image.flags.writeable = False
 
             #################################
             # step 2: side
@@ -65,21 +68,25 @@ def evaluate_pose(args):
             side_image = cv2.cvtColor(frame_, cv2.COLOR_BGR2RGB)
             side_image.flags.writeable = False
             results = pose.process(side_image)
-            evaluator.side_update(side_image, results)
+            #curr_observation = evaluator.side_update(side_image, results)
 
             # drawing
             side_image.flags.writeable = True
             side_image = cv2.cvtColor(side_image, cv2.COLOR_RGB2BGR)
-            evaluator.front_drawing(side_image, results)
+            evaluator.front_drawing(side_image, results, curr_observation)
             side_image.flags.writeable = False
 
             ########################################
             # step 3: aggregate
             ########################################
-            full_image = evaluator.build_screen(front_image, side_image)
+            full_image = evaluator.build_screen(screen, front_image, side_image)
+
             cv2.imshow('Evaluating your pose!', full_image)
-            video_frames.write(image)
-    
+            #cv2.imwrite('test.png', full_image)
+            
+            if args.save_path is not None:
+                video_frames.write(full_image)
+
             if cv2.waitKey(10) & 0xFF == ord('q'):
                 cap_front.release()
                 cap_side.release()
@@ -93,10 +100,11 @@ def evaluate_pose(args):
    
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--save_path", default='output.mp4')
-    parser.add_argument("--front_video_path", default='youTube_video.mp4')
-    parser.add_argument("--side_video_path", default='youTube_video.mp4')
-    parser.add_argument("--workout", default='squat')
-    
+
+    parser.add_argument("--save_path", default=None, help="Path to save the output video")
+    parser.add_argument("--front_video_path", default='youTube_video.mp4', help="Path to the front view video")
+    parser.add_argument("--side_video_path", default='youTube_video.mp4', help="Path to the side view video")
+    parser.add_argument("--workout", default='squat', help="Workout type")
+
     args = parser.parse_args()
     evaluate_pose(args)
