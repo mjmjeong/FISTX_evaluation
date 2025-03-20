@@ -14,13 +14,18 @@
 
 </div>
 
-# <div align="center">Squat angle detection using OpenCv and Mediapipe</div>
+# <div align="center">FistX: AI-driven Lifting Feedback</div>
 <div align="center"> 
 <img src= "https://github.com/Pradnya1208/Squats-angle-detection-using-OpenCV-and-mediapipe_v1/blob/main/output/output2.gif?raw=true" >
 </div>
 
-## Overview:
-Human pose estimation from video plays a critical role in various applications such as quantifying physical exercises, sign language recognition, and full-body gesture control. For example, it can form the basis for yoga, dance, and fitness applications. It can also enable the overlay of digital content and information on top of the physical world in augmented reality.
+## What is FIST X?
+
+FIST X는 functional & weight training의 장점을 결합해 저희만의 스타일로 새롭게 구성한 프로그램을 제공하는 Body shape training club입니다.
+
+💪 **VOLUME**: 볼륨감 있는 체형을 만들어주며, 삶에 더 높은 자신감을 선사합니다. 바벨, 웨이트, 기능성 트레이닝으로 구성된 무산소 운동 중심의 프로그램으로, 근력과 골격근량 향상에 효과적입니다.
+
+🔥 **FAT BURN**:  프로그램은 균형 잡힌 체형과 가벼운 움직임을 통해 더 많은 도전을 할 수 있는 에너지를 제공합니다. 바벨, 웨이트, 기능성 트레이닝을 조합한 유산소 운동 중심의 프로그램으로, 체지방 감량과 심폐 지구력 향상에 효과적입니다.
 
 ## ML Pipeline:
 
